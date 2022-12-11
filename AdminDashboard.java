@@ -267,6 +267,13 @@ public class AdminDashboard implements ActionListener {
             tfsearchuser.setEnabled(true);
             btnupdateuser.setEnabled(false);
             makeEditable(false);
+            showUserDetail();
+            tfuserfullname.setText("");
+            tfuseradd.setText("");
+            tfusertelno.setText("");
+            tfuseremail.setText("");
+            tfuserage.setText("");
+            tfusername.setText("");
             JOptionPane.showMessageDialog(f,"Profile has been updated!");
         }
         stmt.close();
@@ -317,6 +324,29 @@ public class AdminDashboard implements ActionListener {
         pane.setBounds(5,230,460,200);
         stmt.close();
         con.close();
+    }
+    public void deleteUser() throws Exception{
+        int dialogButton = JOptionPane.YES_NO_OPTION;
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/ims","root","");
+        Statement statement = connection.createStatement();
+        ResultSet rs = statement.executeQuery("SELECT name FROM users WHERE username='"+tfsearchuser.getText()+"'");
+        if(rs.next()==false){
+            JOptionPane.showMessageDialog(f,"No such user exists!");
+        }else{
+            int dialogResult = JOptionPane.showConfirmDialog(f,"Are you sure you want to delete user: "+rs.getString("name")+" ?","Confirmation",dialogButton);
+            if (dialogResult == 0){
+                Class.forName("com.mysql.cj.jdbc.Driver");
+                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/ims","root","");
+                Statement stmt = con.createStatement();
+                int r = stmt.executeUpdate("DELETE FROM users where username='"+tfsearchuser.getText()+"'");
+                JOptionPane.showMessageDialog(f,"Users deleted Successfully!");
+                showUserDetail();
+                tfsearchuser.setText("");
+                stmt.close();
+                con.close();
+            }
+        }
     }
     public void loadCategoryTable() throws Exception{
         //show Categories entry on table
@@ -869,6 +899,12 @@ public class AdminDashboard implements ActionListener {
         } else if (e.getSource()==btnupdateuser) {
             try {
                 updateUser();
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        } else if (e.getSource()==btndeleteuser) {
+            try {
+                deleteUser();
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
