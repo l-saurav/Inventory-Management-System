@@ -11,9 +11,9 @@ import java.util.regex.Pattern;
 public class AdminDashboard implements ActionListener {
     JFrame f;
     JPanel panbtn,pancontent;
-    JTextField tfcatid,tfcatname,tfsearchcat,tfrescatid,tfrescatname,tfdelcat,tfproid,tfproname,tfproquantity,tfproprice,tfprodes,tfproide,tfproidee,tfpronamee,tfproquantitye,tfpropricee,tfprodese,tfdelpro;
+    JTextField tfsearchuser, tfcatid,tfcatname,tfsearchcat,tfrescatid,tfrescatname,tfdelcat,tfproid,tfproname,tfproquantity,tfproprice,tfprodes,tfproide,tfproidee,tfpronamee,tfproquantitye,tfpropricee,tfprodese,tfdelpro;
     JComboBox cbxcatname,cbxcatnamee;
-    JButton btnDashboard,btnManageUser,btnManageCategory,btnManageProduct,btnLogout,btnaddcat,btnsearchcat,btnupdatecat,btndelcat,btnaddpro,btneditpro,btnupdatepro, btndelpro;
+    JButton btnDashboard,btnManageUser,btnManageCategory,btnManageProduct,btnLogout,btnsearchuser,btndeleteuser,btnedituser,btnupdateuser,btnaddcat,btnsearchcat,btnupdatecat,btndelcat,btnaddpro,btneditpro,btnupdatepro, btndelpro;
     JTable userTable;
     int purchase_amount,sales_amount;
     JScrollPane pane;
@@ -123,6 +123,19 @@ public class AdminDashboard implements ActionListener {
         con.close();
     }
     public void manageUserContent() throws Exception{
+        JLabel lblsearchuser = new JLabel("Enter user id to search: ");
+        lblsearchuser.setBounds(5,5,150,20);
+        pancontent.add(lblsearchuser);
+        tfsearchuser = new JTextField();
+        tfsearchuser.setBounds(160,5,80,20);
+        pancontent.add(tfsearchuser);
+        btnsearchuser = new JButton("Search");
+        btnsearchuser.setBounds(245,5,80,20);
+        pancontent.add(btnsearchuser);
+        tfsearchuser = new JTextField();
+
+
+        //Show User detail on table
         userTable = new JTable();
         Class.forName("com.mysql.cj.jdbc.Driver");
         Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/ims","root","");
