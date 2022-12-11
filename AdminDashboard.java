@@ -123,18 +123,80 @@ public class AdminDashboard implements ActionListener {
         con.close();
     }
     public void manageUserContent() throws Exception{
-        JLabel lblsearchuser = new JLabel("Enter user id to search: ");
-        lblsearchuser.setBounds(5,5,150,20);
+        JLabel lblsearchuser = new JLabel("Enter username to search:");
+        lblsearchuser.setBounds(5,5,160,20);
         pancontent.add(lblsearchuser);
         tfsearchuser = new JTextField();
-        tfsearchuser.setBounds(160,5,80,20);
+        tfsearchuser.setBounds(170,5,80,20);
         pancontent.add(tfsearchuser);
         btnsearchuser = new JButton("Search");
-        btnsearchuser.setBounds(245,5,80,20);
+        btnsearchuser.setBounds(255,5,80,20);
         pancontent.add(btnsearchuser);
-        tfsearchuser = new JTextField();
+        btnsearchuser.addActionListener(this);
 
+        JTextField tfuserfullname,tfuseradd,tfusertelno,tfuseremail,tfuserage,tfusername;
+        JLabel lbluserfullname = new JLabel("User Full Name:");
+        lbluserfullname.setBounds(5,40,100,20);
+        pancontent.add(lbluserfullname);
+        tfuserfullname = new JTextField();
+        tfuserfullname.setBounds(105,40,150,20);
+        pancontent.add(tfuserfullname);
+        JLabel lbluseraddress = new JLabel("User Address:");
+        lbluseraddress.setBounds(5,65,100,20);
+        pancontent.add(lbluseraddress);
+        tfuseradd = new JTextField();
+        tfuseradd.setBounds(105,65,150,20);
+        pancontent.add(tfuseradd);
+        JLabel lblusertelno = new JLabel("Telephone No.:");
+        lblusertelno.setBounds(5,90,100,20);
+        pancontent.add(lblusertelno);
+        tfusertelno = new JTextField();
+        tfusertelno.setBounds(105,90,150,20);
+        pancontent.add(tfusertelno);
+        JLabel lbluseremail = new JLabel("User Email:");
+        lbluseremail.setBounds(5,115,100,20);
+        pancontent.add(lbluseremail);
+        tfuseremail = new JTextField();
+        tfuseremail.setBounds(105,115,150,20);
+        pancontent.add(tfuseremail);
+        JLabel lbluserage = new JLabel("User Age:");
+        lbluserage.setBounds(260,40,100,20);
+        pancontent.add(lbluserage);
+        tfuserage = new JTextField();
+        tfuserage.setBounds(360,40,100,20);
+        pancontent.add(tfuserage);
+        JLabel lblusergender = new JLabel("Gender:");
+        lblusergender.setBounds(260,65,100,20);
+        pancontent.add(lblusergender);
+        /*360,65,100,20 male
+        * 360,90,100,20*/
+        JLabel lblusername = new JLabel("Username:");
+        lblusername.setBounds(260,115,100,20);
+        pancontent.add(lblusername);
+        tfusername = new JTextField();
+        tfusername.setBounds(360,115,100,20);
+        pancontent.add(tfusername);
 
+        showUserDetail();
+    }
+    public void searchUser() throws Exception{
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/ims","root","");
+        Statement stmt = con.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM users WHERE username='"+tfsearchuser.getText()+"'");
+        if (rs.next()==false){
+            JOptionPane.showMessageDialog(f,"No Search Result found!");
+        }else {
+            /*tfrescatname.setEditable(true);
+            btnupdatecat.setText("Update");
+            tfrescatid.setText(String.valueOf(rs.getInt(1)));
+            tfrescatname.setText(rs.getString(2));*/
+            JOptionPane.showMessageDialog(f,"Search Successful");
+        }
+        stmt.close();
+        con.close();
+    }
+    public void showUserDetail() throws Exception{
         //Show User detail on table
         userTable = new JTable();
         Class.forName("com.mysql.cj.jdbc.Driver");
@@ -704,6 +766,12 @@ public class AdminDashboard implements ActionListener {
         } else if (e.getSource()==btndelpro) {
             try {
                 deleteProduct();
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        } else if (e.getSource()==btnsearchuser) {
+            try {
+                searchUser();
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
