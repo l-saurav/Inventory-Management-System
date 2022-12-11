@@ -11,8 +11,10 @@ import java.util.regex.Pattern;
 public class AdminDashboard implements ActionListener {
     JFrame f;
     JPanel panbtn,pancontent;
-    JTextField tfsearchuser, tfcatid,tfcatname,tfsearchcat,tfrescatid,tfrescatname,tfdelcat,tfproid,tfproname,tfproquantity,tfproprice,tfprodes,tfproide,tfproidee,tfpronamee,tfproquantitye,tfpropricee,tfprodese,tfdelpro;
+    JTextField tfsearchuser,tfuserfullname,tfuseradd,tfusertelno,tfuseremail,tfuserage,tfusername, tfcatid,tfcatname,tfsearchcat,tfrescatid,tfrescatname,tfdelcat,tfproid,tfproname,tfproquantity,tfproprice,tfprodes,tfproide,tfproidee,tfpronamee,tfproquantitye,tfpropricee,tfprodese,tfdelpro;
     JComboBox cbxcatname,cbxcatnamee;
+    JRadioButton rbtnmale,rbtnfemale;
+    ButtonGroup btnggen;
     JButton btnDashboard,btnManageUser,btnManageCategory,btnManageProduct,btnLogout,btnsearchuser,btndeleteuser,btnedituser,btnupdateuser,btnaddcat,btnsearchcat,btnupdatecat,btndelcat,btnaddpro,btneditpro,btnupdatepro, btndelpro;
     JTable userTable;
     int purchase_amount,sales_amount;
@@ -124,60 +126,107 @@ public class AdminDashboard implements ActionListener {
     }
     public void manageUserContent() throws Exception{
         JLabel lblsearchuser = new JLabel("Enter username to search:");
-        lblsearchuser.setBounds(5,5,160,20);
+        lblsearchuser.setBounds(5,15,160,20);
         pancontent.add(lblsearchuser);
         tfsearchuser = new JTextField();
-        tfsearchuser.setBounds(170,5,80,20);
+        tfsearchuser.setBounds(170,15,60,20);
         pancontent.add(tfsearchuser);
         btnsearchuser = new JButton("Search");
-        btnsearchuser.setBounds(255,5,80,20);
+        btnsearchuser.setBounds(245,15,80,20);
         pancontent.add(btnsearchuser);
         btnsearchuser.addActionListener(this);
+        btnedituser = new JButton("Edit");
+        btnedituser.setBounds(325,15,70,20);
+        pancontent.add(btnedituser);
+        btnedituser.addActionListener(this);
+        btndeleteuser = new JButton("Delete");
+        btndeleteuser.setBounds(385,15,80,20);
+        pancontent.add(btndeleteuser);
+        btndeleteuser.addActionListener(this);
 
-        JTextField tfuserfullname,tfuseradd,tfusertelno,tfuseremail,tfuserage,tfusername;
+
         JLabel lbluserfullname = new JLabel("User Full Name:");
-        lbluserfullname.setBounds(5,40,100,20);
+        lbluserfullname.setBounds(5,70,100,20);
         pancontent.add(lbluserfullname);
         tfuserfullname = new JTextField();
-        tfuserfullname.setBounds(105,40,150,20);
+        tfuserfullname.setBounds(105,70,150,20);
         pancontent.add(tfuserfullname);
         JLabel lbluseraddress = new JLabel("User Address:");
-        lbluseraddress.setBounds(5,65,100,20);
+        lbluseraddress.setBounds(5,95,100,20);
         pancontent.add(lbluseraddress);
         tfuseradd = new JTextField();
-        tfuseradd.setBounds(105,65,150,20);
+        tfuseradd.setBounds(105,95,150,20);
         pancontent.add(tfuseradd);
         JLabel lblusertelno = new JLabel("Telephone No.:");
-        lblusertelno.setBounds(5,90,100,20);
+        lblusertelno.setBounds(5,120,100,20);
         pancontent.add(lblusertelno);
         tfusertelno = new JTextField();
-        tfusertelno.setBounds(105,90,150,20);
+        tfusertelno.setBounds(105,120,150,20);
         pancontent.add(tfusertelno);
         JLabel lbluseremail = new JLabel("User Email:");
-        lbluseremail.setBounds(5,115,100,20);
+        lbluseremail.setBounds(5,145,100,20);
         pancontent.add(lbluseremail);
         tfuseremail = new JTextField();
-        tfuseremail.setBounds(105,115,150,20);
+        tfuseremail.setBounds(105,145,150,20);
         pancontent.add(tfuseremail);
         JLabel lbluserage = new JLabel("User Age:");
-        lbluserage.setBounds(260,40,100,20);
+        lbluserage.setBounds(260,70,100,20);
         pancontent.add(lbluserage);
         tfuserage = new JTextField();
-        tfuserage.setBounds(360,40,100,20);
+        tfuserage.setBounds(360,70,100,20);
         pancontent.add(tfuserage);
         JLabel lblusergender = new JLabel("Gender:");
-        lblusergender.setBounds(260,65,100,20);
+        lblusergender.setBounds(260,95,100,20);
         pancontent.add(lblusergender);
-        /*360,65,100,20 male
-        * 360,90,100,20*/
+        rbtnmale = new JRadioButton("Male");
+        rbtnmale.setBounds(360,95,100,20);
+        pancontent.add(rbtnmale);
+        rbtnfemale = new JRadioButton("Female");
+        rbtnfemale.setBounds(360,120,100,20);
+        pancontent.add(rbtnfemale);
+        btnggen = new ButtonGroup();
+        btnggen.add(rbtnmale);
+        btnggen.add(rbtnfemale);
         JLabel lblusername = new JLabel("Username:");
-        lblusername.setBounds(260,115,100,20);
+        lblusername.setBounds(260,145,100,20);
         pancontent.add(lblusername);
         tfusername = new JTextField();
-        tfusername.setBounds(360,115,100,20);
+        tfusername.setBounds(360,145,100,20);
         pancontent.add(tfusername);
-
+        makeEditable(false);
+        btnupdateuser = new JButton("Update");
+        btnupdateuser.setBounds(360,180,100,20);
+        pancontent.add(btnupdateuser);
+        btnupdateuser.addActionListener(this);
+        btnupdateuser.setEnabled(false);
+        
         showUserDetail();
+    }
+    public void editUser() throws Exception{
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/ims","root","");
+        Statement stmt = con.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM users WHERE username='"+tfsearchuser.getText()+"'");
+        if (rs.next()==false){
+            JOptionPane.showMessageDialog(f,"No Search Result found!");
+        }else {
+            tfsearchuser.setEnabled(false);
+            btnupdateuser.setEnabled(true);
+            makeEditable(true);
+            tfuserfullname.setText(rs.getString("name"));
+            tfuseradd.setText(rs.getString("address"));
+            tfusertelno.setText(rs.getString("telephone_no"));
+            tfuseremail.setText(rs.getString("email"));
+            tfuserage.setText(String.valueOf(rs.getInt("age")));
+            if(rs.getString("gender").equals("Male")){
+                rbtnmale.setSelected(true);
+            }else{
+                rbtnfemale.setSelected(true);
+            }
+            tfusername.setText(rs.getString("username"));
+        }
+        stmt.close();
+        con.close();
     }
     public void searchUser() throws Exception{
         Class.forName("com.mysql.cj.jdbc.Driver");
@@ -187,14 +236,29 @@ public class AdminDashboard implements ActionListener {
         if (rs.next()==false){
             JOptionPane.showMessageDialog(f,"No Search Result found!");
         }else {
-            /*tfrescatname.setEditable(true);
-            btnupdatecat.setText("Update");
-            tfrescatid.setText(String.valueOf(rs.getInt(1)));
-            tfrescatname.setText(rs.getString(2));*/
-            JOptionPane.showMessageDialog(f,"Search Successful");
+            tfuserfullname.setText(rs.getString("name"));
+            tfuseradd.setText(rs.getString("address"));
+            tfusertelno.setText(rs.getString("telephone_no"));
+            tfuseremail.setText(rs.getString("email"));
+            tfuserage.setText(String.valueOf(rs.getInt("age")));
+            if(rs.getString("gender").equals("Male")){
+                rbtnmale.setSelected(true);
+            }else{
+                rbtnfemale.setSelected(true);
+            }
+            tfusername.setText(rs.getString("username"));
         }
         stmt.close();
         con.close();
+    }
+    public void makeEditable(Boolean arg){
+        tfuserfullname.setEditable(arg);
+        tfuseradd.setEditable(arg);
+        tfusertelno.setEditable(arg);
+        tfuseremail.setEditable(arg);
+        tfuserage.setEditable(arg);
+        //rbtnmale.setDisabledIcon();
+        tfusername.setEditable(arg);
     }
     public void showUserDetail() throws Exception{
         //Show User detail on table
@@ -772,6 +836,12 @@ public class AdminDashboard implements ActionListener {
         } else if (e.getSource()==btnsearchuser) {
             try {
                 searchUser();
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        } else if (e.getSource()==btnedituser) {
+            try {
+                editUser();
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
