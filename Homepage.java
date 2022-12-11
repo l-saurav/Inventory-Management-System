@@ -1,8 +1,10 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.sql.*;
-public class Homepage implements ActionListener{
+public class Homepage implements ActionListener, MouseListener {
     JFrame frame;
     JLabel lbllogin,lbluname,lblpass,lblsignup;
     JTextField tfunmae;
@@ -29,6 +31,10 @@ public class Homepage implements ActionListener{
         frame.add(lblpass);
         pfpass.setBounds(120,110,150,25);
         frame.add(pfpass);
+        JLabel lblForgetPassword = new JLabel("Forget Password?");
+        lblForgetPassword.setBounds(80,140,110,20);
+        frame.add(lblForgetPassword);
+        lblForgetPassword.addMouseListener(this);
         btnlogin.setBounds(200,140,70,20);
         frame.add(btnlogin);
         btnlogin.addActionListener(this);
@@ -77,6 +83,18 @@ public class Homepage implements ActionListener{
             new RegistrationPage();
         }
     }
+    public void mouseClicked(MouseEvent e){
+        frame.dispose();
+        try {
+            new PasswordReset();
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+    public void mouseExited(MouseEvent e){}
+    public void mouseEntered(MouseEvent e){}
+    public void mouseReleased(MouseEvent e){}
+    public void mousePressed(MouseEvent e){}
     public static void main(String[] args) throws Exception {
         new Homepage();
     }
