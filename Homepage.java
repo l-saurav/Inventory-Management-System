@@ -96,6 +96,6 @@ public class Homepage implements ActionListener, MouseListener {
     public void mouseReleased(MouseEvent e){}
     public void mousePressed(MouseEvent e){}
     public static void main(String[] args) throws Exception {
-        new PasswordReset();
+        new Homepage();
     }
 }
